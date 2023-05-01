@@ -1,7 +1,7 @@
 # Проект «Большое путешествие»
 
 * Студент: [Константин Ерошкин](https://up.htmlacademy.ru/ecmascript/20/user/1267999).
-* Наставник: `Неизвестно`.
+* Наставник: [Алексей Хабиров](https://htmlacademy.ru/profile/alex_khab).
 
 ---
 
