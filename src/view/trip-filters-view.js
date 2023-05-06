@@ -1,7 +1,7 @@
 import { createElement } from '../render.js';
 
 function createTripFiltersTemplate() {
-  return `<div class="trip-main__trip-controls  trip-controls">
+  return (`<div class="trip-main__trip-controls  trip-controls">
   <div class="trip-controls__filters">
     <h2 class="visually-hidden">Filter events</h2>
     <form class="trip-filters" action="#" method="get">
@@ -28,7 +28,7 @@ function createTripFiltersTemplate() {
       <button class="visually-hidden" type="submit">Accept filter</button>
     </form>
   </div>
-</div>`;
+</div>`);
 }
 
 export default class TripFiltersView {

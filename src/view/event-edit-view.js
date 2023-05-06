@@ -1,7 +1,7 @@
 import { createElement } from '../render.js';
 
 function createEventEditTemplate() {
-  return `<li class="trip-events__item">
+  return (`<li class="trip-events__item">
   <form class="event event--edit" action="#" method="post">
     <header class="event__header">
       <div class="event__type-wrapper">
@@ -162,7 +162,7 @@ function createEventEditTemplate() {
       </section>
     </section>
   </form>
-</li>`;
+</li>`);
 }
 
 export default class EventEditView {

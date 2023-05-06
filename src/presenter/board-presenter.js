@@ -8,6 +8,7 @@ export default class BoardPresenter {
   boardSortEventComponent = new TripSortEventView();
   eventListComponent = new EventListView();
   eventEditView = new EventEditView();
+
   constructor({boardContainer}) {
     this.boardContainer = boardContainer;
   }
@@ -16,8 +17,10 @@ export default class BoardPresenter {
     render(this.boardSortEventComponent, this.boardContainer);
     render(this.eventListComponent, this.boardContainer);
     render(this.eventEditView, this.eventListComponent.getElement());
+
     for (let i = 0; i < 3; i++) {
       render(new EventDefaultView(), this.eventListComponent.getElement());
     }
+
   }
 }
