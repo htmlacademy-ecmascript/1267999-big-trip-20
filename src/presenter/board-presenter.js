@@ -9,18 +9,31 @@ export default class BoardPresenter {
   eventListComponent = new EventListView();
   eventEditView = new EventEditView();
 
-  constructor({boardContainer}) {
+  constructor({boardContainer, destinationsModel, offersModel, pointsModel}) {
     this.boardContainer = boardContainer;
+    this.destinationsModel = destinationsModel;
+    this.offersModel = offersModel;
+    this.pointsModel = pointsModel;
+    this.points = [...pointsModel.get()];
   }
 
   init() {
     render(this.boardSortEventComponent, this.boardContainer);
     render(this.eventListComponent, this.boardContainer);
-    render(this.eventEditView, this.eventListComponent.getElement());
+    render(
+      new EventEditView({
+        point: this.points[0],
+        pointDestinations: this.destinationsModel.get(),
+        pointOffers: this.offersModel.get()
+      }), this.eventListComponent.getElement());
 
-    for (let i = 0; i < 3; i++) {
-      render(new EventDefaultView(), this.eventListComponent.getElement());
-    }
-
+    this.points.forEach((point) => {
+      render(
+        new EventDefaultView({
+          point,
+          pointDestination: this.destinationsModel.getById(point.destination),
+          pointOffers: this.offersModel.getByType(point.type)
+        }), this.eventListComponent.getElement());
+    });
   }
 }

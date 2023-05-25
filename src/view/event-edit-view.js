@@ -1,6 +1,51 @@
-import { createElement } from '../render.js';
+import {POINT_EMPTY} from '../const.js';
+import {createElement} from '../render.js';
 
-function createEventEditTemplate() {
+// export default class EventEditView {
+//   getTemplate() {
+//     return createEventEditTemplate();
+//   }
+
+//   getElement() {
+//     if (!this.element) {
+//       this.element = createElement(this.getTemplate());
+//     }
+//     return this.element;
+//   }
+
+//   removeElement() {
+//     this.element = null;
+//   }
+// }
+
+export default class EventEditView {
+  constructor({point = POINT_EMPTY, pointDestinations, pointOffers}) {
+    this.point = point;
+    this.pointDestinations = pointDestinations;
+    this.pointOffers = pointOffers;
+  }
+
+  getTemplate() {
+    return createEventEditTemplate({
+      point: this.point,
+      pointDestinations: this.pointDestinations,
+      pointOffers: this.pointOffers
+    });
+  }
+
+  getElement() {
+    if (!this.element) {
+      this.element = createElement(this.getTemplate());
+    }
+    return this.element;
+  }
+
+  removeElement() {
+    this.element = null;
+  }
+}
+
+function createEventEditTemplate({point, pointDestinations, pointOffers}) {
   return (`<li class="trip-events__item">
   <form class="event event--edit" action="#" method="post">
     <header class="event__header">
@@ -163,21 +208,4 @@ function createEventEditTemplate() {
     </section>
   </form>
 </li>`);
-}
-
-export default class EventEditView {
-  getTemplate() {
-    return createEventEditTemplate();
-  }
-
-  getElement() {
-    if (!this.element) {
-      this.element = createElement(this.getTemplate());
-    }
-    return this.element;
-  }
-
-  removeElement() {
-    this.element = null;
-  }
 }
