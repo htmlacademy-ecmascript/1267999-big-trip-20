@@ -4,7 +4,7 @@ export default class DestinationsModel {
     this.Destinations = this.service.getDestinations();
   }
 
-  get() {
+  getDestinations() {
     return this.Destinations;
   }
 
