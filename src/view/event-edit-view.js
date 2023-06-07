@@ -1,14 +1,18 @@
+import AbstractView from '../framework/view/abstract-view.js';
 import {POINT_EMPTY, TYPES} from '../const.js';
-import {createElement} from '../render.js';
 import {getCurrentDate} from '../utils.js';
 
-function createTypeItem(types) {
-  return types.map((type) => (`
+function createTypeItem(types, point) {
+  const typePoint = point.type;
+  return types.map((type) => {
+    const checked = (type === typePoint) ? 'checked' : '';
+    return (`
       <div class="event__type-item">
-        <input id="event-type-${type.toLowerCase()}-1" class="event__type-input  visually-hidden" type="radio" name="event-type" value="${type.toLowerCase()}">
+        <input id="event-type-${type.toLowerCase()}-1" class="event__type-input  visually-hidden" type="radio" name="event-type" value="${type.toLowerCase()}" ${checked}>
         <label class="event__type-label  event__type-label--${type.toLowerCase()}" for="event-type-${type.toLowerCase()}-1">${type}</label>
       </div>
-  `)).join('');
+  `);
+  }).join('');
 }
 
 function createCityItems(pointDestinations) {
@@ -79,7 +83,7 @@ function createEventEditTemplate({point, pointDestinations, pointOffers}) {
             <div class="event__type-list">
               <fieldset class="event__type-group">
                 <legend class="visually-hidden">Event type</legend>
-                ${createTypeItem(TYPES)}
+                ${createTypeItem(TYPES, point)}
               </fieldset>
             </div>
           </div>
@@ -134,31 +138,35 @@ function createEventEditTemplate({point, pointDestinations, pointOffers}) {
 }
 
 
-export default class EventEditView {
-  constructor({point = POINT_EMPTY, pointDestinations, pointOffers}) {
-    this.point = point;
-    this.pointDestinations = pointDestinations;
-    this.pointOffers = pointOffers;
+export default class EventEditView extends AbstractView {
+  #point = null;
+  #pointDestinations = null;
+  #pointOffers = null;
+  #onSubmitClick = null;
+
+  constructor({point = POINT_EMPTY, pointDestinations, pointOffers, onSubmitClick}) {
+    super();
+    this.#point = point;
+    this.#pointDestinations = pointDestinations;
+    this.#pointOffers = pointOffers;
+    this.#onSubmitClick = onSubmitClick;
+
+    this.element
+      .querySelector('.event__save-btn')
+      .addEventListener('click', this.#submitHandler);
   }
 
-  getTemplate() {
+  get template() {
     return createEventEditTemplate({
-      point: this.point,
-      pointDestinations: this.pointDestinations,
-      pointOffers: this.pointOffers,
-      TYPES
+      point: this.#point,
+      pointDestinations: this.#pointDestinations,
+      pointOffers: this.#pointOffers,
     });
   }
 
-  getElement() {
-    if (!this.element) {
-      this.element = createElement(this.getTemplate());
-    }
-    return this.element;
-  }
-
-  removeElement() {
-    this.element = null;
-  }
+  #submitHandler = (evt) => {
+    evt.preventDefault();
+    this.#onSubmitClick();
+  };
 }
 
