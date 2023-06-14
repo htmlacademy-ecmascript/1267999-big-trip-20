@@ -1,5 +1,5 @@
-import {getRandomInteger} from '../utils';
-import {Price} from '../const';
+import {getRandomInteger} from '../utils/common.js';
+import {Price} from '../const.js';
 
 function generateOffer(type) {
   return {

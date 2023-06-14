@@ -1,6 +1,6 @@
 import {Price} from '../const.js';
-import {getRandomInteger} from '../utils.js';
-import {getDate} from '../utils.js';
+import {getRandomInteger} from '../utils/common.js';
+import {getDate} from '../utils/point.js';
 
 function generatePoint(type, destinationId, offerIds) {
   return {

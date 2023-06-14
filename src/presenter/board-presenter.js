@@ -1,8 +1,8 @@
 import {render, replace} from '../framework/render.js';
-import TripSortEventView from '../view/trip-sort-event-view.js';
-import EventListView from '../view/event-list-view.js';
-import EventEditView from '../view/event-edit-view.js';
-import EventView from '../view/event-view.js';
+import TripSortPointView from '../view/trip-sort-point-view.js';
+import PointListView from '../view/point-list-view.js';
+import PointEditView from '../view/point-edit-view.js';
+import PointView from '../view/point-view.js';
 
 export default class BoardPresenter {
   #boardContainer = null;
@@ -10,8 +10,8 @@ export default class BoardPresenter {
   #offersModel = null;
   #pointsModel = null;
   #points = null;
-  #boardSortEventComponent = new TripSortEventView();
-  #eventListComponent = new EventListView();
+  #boardSortPointComponent = new TripSortPointView();
+  #pointListComponent = new PointListView();
 
   constructor({boardContainer, destinationsModel, offersModel, pointsModel}) {
     this.#boardContainer = boardContainer;
@@ -22,22 +22,22 @@ export default class BoardPresenter {
   }
 
   init() {
-    render(this.#boardSortEventComponent, this.#boardContainer);
-    render(this.#eventListComponent, this.#boardContainer);
+    render(this.#boardSortPointComponent, this.#boardContainer);
+    render(this.#pointListComponent, this.#boardContainer);
     this.#points.forEach((point) => {
       this.#renderPoint(point);
     });
   }
 
   #renderPoint = (point) => {
-    const pointComponent = new EventView({
+    const pointComponent = new PointView({
       point,
       pointDestination: this.#destinationsModel.getById(point.destination),
       pointOffersByType: this.#offersModel.getByType(point.type),
       onEditClick: pointEditClickHandler
     });
 
-    const pointEditComponent = new EventEditView({
+    const pointEditComponent = new PointEditView({
       point: this.#points[0],
       pointDestinations: this.#destinationsModel.destinations,
       pointOffers: this.#offersModel.offers,
@@ -76,6 +76,6 @@ export default class BoardPresenter {
       document.removeEventListener('keydown', escKeyDownHandler);
     }
 
-    render(pointComponent, this.#eventListComponent.element);
+    render(pointComponent, this.#pointListComponent.element);
   };
 }
