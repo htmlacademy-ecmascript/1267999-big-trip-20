@@ -3,7 +3,7 @@ import TripSortPointView from '../view/trip-sort-point-view.js';
 import PointListView from '../view/point-list-view.js';
 import PointEditView from '../view/point-edit-view.js';
 import PointView from '../view/point-view.js';
-import NoPointView from "../view/no-point-view.js";
+import NoPointView from '../view/no-point-view.js';
 
 export default class BoardPresenter {
   #boardContainer = null;
