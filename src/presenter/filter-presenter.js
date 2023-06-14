@@ -16,6 +16,6 @@ export default class FilterPresenter {
   }
 
   init() {
-    render(new TripFiltersView(this.#filters), this.#container);
+    render(new TripFiltersView({filters: this.#filters}), this.#container);
   }
 }

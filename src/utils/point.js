@@ -62,8 +62,9 @@ function getPointDuration(dateFrom, dateTo) {
   return pointDuration;
 }
 
-export {};
-
+function formatStringToCapital(str) {
+  return str.charAt(0).toUpperCase() + str.slice(1);
+}
 
 function isPointFuture(point) {
   return dayjs().isBefore(point.dateFrom);
@@ -84,6 +85,7 @@ export {
   formatStringToHours,
   getDate,
   getCurrentDate,
+  formatStringToCapital,
   isPointFuture,
   isPointPresent,
   isPointPast
