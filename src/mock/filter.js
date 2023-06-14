@@ -5,7 +5,7 @@ function generateFilters(points) {
     .map(([filterType, filterPoints]) => ({
       type: filterType,
       hasPoints: filterPoints(points).length > 0
-  }));
+    }));
 }
 
 export {generateFilters};

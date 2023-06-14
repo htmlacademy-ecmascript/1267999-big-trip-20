@@ -44,6 +44,6 @@ export default class TripFiltersView extends AbstractView {
   get template() {
     return createTripFiltersTemplate({
       filters: this.#filters
-  });
+    });
   }
 }

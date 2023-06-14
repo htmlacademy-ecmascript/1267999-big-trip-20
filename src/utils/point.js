@@ -87,4 +87,4 @@ export {
   isPointFuture,
   isPointPresent,
   isPointPast
-}
+};
