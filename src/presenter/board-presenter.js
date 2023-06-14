@@ -3,6 +3,7 @@ import TripSortPointView from '../view/trip-sort-point-view.js';
 import PointListView from '../view/point-list-view.js';
 import PointEditView from '../view/point-edit-view.js';
 import PointView from '../view/point-view.js';
+import NoPointView from "../view/no-point-view.js";
 
 export default class BoardPresenter {
   #boardContainer = null;
@@ -22,6 +23,12 @@ export default class BoardPresenter {
   }
 
   init() {
+
+    if (!this.#points.length) {
+      render(new NoPointView(), this.#boardContainer);
+      return;
+    }
+
     render(this.#boardSortPointComponent, this.#boardContainer);
     render(this.#pointListComponent, this.#boardContainer);
     this.#points.forEach((point) => {
