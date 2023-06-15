@@ -33,5 +33,10 @@ const POINT_EMPTY = {
   offers: [],
   type: DEFAULT_TYPE
 };
-
-export {DESCRIPTION, TYPES, CITIES, Price, Duration, MSEC_IN_SEC, SEC_IN_MIN, MIN_IN_HOUR, HOUR_IN_DAY, DESTINATION_COUNT, OFFER_COUNT, POINT_COUNT, POINT_EMPTY};
+const FilterType = {
+  EVERYTHING: 'everything',
+  FUTURE: 'future',
+  PRESENT: 'present',
+  PAST: 'past'
+};
+export {DESCRIPTION, TYPES, CITIES, Price, Duration, MSEC_IN_SEC, SEC_IN_MIN, MIN_IN_HOUR, HOUR_IN_DAY, DESTINATION_COUNT, OFFER_COUNT, POINT_COUNT, POINT_EMPTY, FilterType};

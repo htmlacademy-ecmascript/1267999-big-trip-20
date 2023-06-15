@@ -1,11 +1,10 @@
 import AbstractView from '../framework/view/abstract-view.js';
-import {formatStringToDateTime, formatStringToShortDate, formatStringToHours, getPointDuration} from '../utils.js';
+import {formatStringToDateTime, formatStringToShortDate, formatStringToHours, getPointDuration} from '../utils/point.js';
 
 function createOffersTemplate({pointOffersByType, offers}) {
   if (pointOffersByType.length === 0) {
     return '';
   }
-  // проверить через includes содержится ли typeofferid в offers
   return pointOffersByType.map((typeOffer) => {
     offers.includes(typeOffer.id);
     const checked = offers.includes(typeOffer.id);
@@ -22,8 +21,8 @@ function createOffersTemplate({pointOffersByType, offers}) {
   }).join('');
 }
 
-function createEventTemplate({point, pointDestination, pointOffersByType}) {
-  const {basePrice, dateFrom, dateTo, offers, isFavorite, type} = point;
+function createPointTemplate({point, pointDestination, pointOffersByType}) {
+  const {basePrice, dateFrom, dateTo, offers, isFavorite, type, typeImg = type.toLowerCase()} = point;
   const favoriteButton = (isFavorite) ? 'event__favorite-btn--active' : '';
   const {name} = pointDestination;
 
@@ -32,7 +31,7 @@ function createEventTemplate({point, pointDestination, pointOffersByType}) {
       <div class="event">
         <time class="event__date" datetime=${formatStringToDateTime(dateFrom)}>${formatStringToShortDate(dateFrom)}</time>
         <div class="event__type">
-          <img class="event__type-icon" width="42" height="42" src="img/icons/${type}.png" alt="Event type icon">
+          <img class="event__type-icon" width="42" height="42" src="img/icons/${typeImg}.png" alt="Event type icon">
         </div>
         <h3 class="event__title">${type} ${name}</h3>
         <div class="event__schedule">
@@ -64,7 +63,7 @@ function createEventTemplate({point, pointDestination, pointOffersByType}) {
   `);
 }
 
-export default class EventView extends AbstractView {
+export default class PointView extends AbstractView {
   #point = null;
   #pointDestination = null;
   #pointOffersByType = null;
@@ -83,7 +82,7 @@ export default class EventView extends AbstractView {
   }
 
   get template() {
-    return createEventTemplate({
+    return createPointTemplate({
       point: this.#point,
       pointDestination: this.#pointDestination,
       pointOffersByType: this.#pointOffersByType

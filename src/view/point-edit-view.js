@@ -1,6 +1,6 @@
 import AbstractView from '../framework/view/abstract-view.js';
 import {POINT_EMPTY, TYPES} from '../const.js';
-import {getCurrentDate} from '../utils.js';
+import {getCurrentDate} from '../utils/point.js';
 
 function createTypeItem(types, point) {
   const typePoint = point.type;
@@ -67,8 +67,8 @@ function createImageItem(point, pointDestinations) {
   }).join('');
 }
 
-function createEventEditTemplate({point, pointDestinations, pointOffers}) {
-  const {basePrice, dateFrom, dateTo, offers, type} = point;
+function createPointEditTemplate({point, pointDestinations, pointOffers}) {
+  const {basePrice, dateFrom, dateTo, offers, type, typeImg = type.toLowerCase()} = point;
   return (`
     <li class="trip-events__item">
       <form class="event event--edit" action="#" method="post">
@@ -76,7 +76,7 @@ function createEventEditTemplate({point, pointDestinations, pointOffers}) {
           <div class="event__type-wrapper">
             <label class="event__type  event__type-btn" for="event-type-toggle-1">
               <span class="visually-hidden">Choose event type</span>
-              <img class="event__type-icon" width="17" height="17" src="img/icons/${type}.png" alt="Event type icon">
+              <img class="event__type-icon" width="17" height="17" src="img/icons/${typeImg}.png" alt="Event type icon">
             </label>
             <input class="event__type-toggle  visually-hidden" id="event-type-toggle-1" type="checkbox">
 
@@ -138,7 +138,7 @@ function createEventEditTemplate({point, pointDestinations, pointOffers}) {
 }
 
 
-export default class EventEditView extends AbstractView {
+export default class PointEditView extends AbstractView {
   #point = null;
   #pointDestinations = null;
   #pointOffers = null;
@@ -157,7 +157,7 @@ export default class EventEditView extends AbstractView {
   }
 
   get template() {
-    return createEventEditTemplate({
+    return createPointEditTemplate({
       point: this.#point,
       pointDestinations: this.#pointDestinations,
       pointOffers: this.#pointOffers,
