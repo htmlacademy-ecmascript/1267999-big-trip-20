@@ -1,15 +1,23 @@
 import AbstractView from '../framework/view/abstract-view.js';
 import {POINT_EMPTY, TYPES} from '../const.js';
-import {getCurrentDate} from '../utils/point.js';
+import {getCurrentDate, getOfferClass, getTypeLabel} from '../utils/point.js';
 
 function createTypeItem(types, point) {
   const typePoint = point.type;
   return types.map((type) => {
     const checked = (type === typePoint) ? 'checked' : '';
+    const typeLabel = getTypeLabel(type);
     return (`
       <div class="event__type-item">
-        <input id="event-type-${type.toLowerCase()}-1" class="event__type-input  visually-hidden" type="radio" name="event-type" value="${type.toLowerCase()}" ${checked}>
-        <label class="event__type-label  event__type-label--${type.toLowerCase()}" for="event-type-${type.toLowerCase()}-1">${type}</label>
+        <input
+          id="event-type-${type.toLowerCase()}-1"
+          class="event__type-input visually-hidden"
+          type="radio"
+          name="event-type"
+          value="${type.toLowerCase()}"
+          ${checked}
+        >
+        <label class="event__type-label  event__type-label--${type.toLowerCase()}" for="event-type-${type.toLowerCase()}-1">${typeLabel}</label>
       </div>
   `);
   }).join('');
@@ -27,7 +35,7 @@ function createOffersItems({point, pointOffers, offers}) {
 
   return offersPoint.offers.map((offer) => {
     const checked = (offers.includes(offer.id)) ? 'checked' : '';
-    const offerClass = offer.title.trim().toLowerCase().replace(/[^a-zA-Z0-9 -]/, '').replace(/\s/g, '-');
+    const offerClass = getOfferClass(offer.title);
     return (`
     <div class="event__offer-selector">
       <input class="event__offer-checkbox  visually-hidden" id="event-${offerClass}-1" type="checkbox" name="event-${offerClass}" ${checked}>
@@ -92,18 +100,35 @@ function createPointEditTemplate({point, pointDestinations, pointOffers}) {
             <label class="event__label  event__type-output" for="event-destination-1">
               ${type}
             </label>
-            <input class="event__input  event__input--destination" id="event-destination-1" type="text" name="event-destination" list="destination-list-1">
+            <input
+             class="event__input event__input--destination"
+             id="event-destination-1"
+             type="text"
+             name="event-destination"
+             list="destination-list-1"
+            >
             <datalist id="destination-list-1">
               ${createCityItems(pointDestinations)}
             </datalist>
           </div>
 
-          <div class="event__field-group  event__field-group--time">
+          <div class="event__field-group event__field-group--time">
             <label class="visually-hidden" for="event-start-time-1">From</label>
-            <input class="event__input  event__input--time" id="event-start-time-1" type="text" name="event-start-time" value="${getCurrentDate(dateFrom)}">
+            <input
+              class="event__input event__input--time"
+              id="event-start-time-1"
+              type="text"
+              name="event-start-time"
+              value="${getCurrentDate(dateFrom)}"
+            >
             &mdash;
             <label class="visually-hidden" for="event-end-time-1">To</label>
-            <input class="event__input  event__input--time" id="event-end-time-1" type="text" name="event-end-time" value="${getCurrentDate(dateTo)}">
+            <input
+              class="event__input event__input--time"
+              id="event-end-time-1"
+              type="text" name="event-end-time"
+              value="${getCurrentDate(dateTo)}"
+            >
           </div>
 
           <div class="event__field-group  event__field-group--price">
@@ -115,7 +140,8 @@ function createPointEditTemplate({point, pointDestinations, pointOffers}) {
           </div>
 
           <button class="event__save-btn  btn  btn--blue" type="submit">Save</button>
-          <button class="event__reset-btn" type="reset">Cancel</button>
+          <button class="event__reset-btn" type="reset">Delete</button>
+          <button class="event__rollup-btn" type="button">
         </header>
         <section class="event__details">
           <section class="event__section  event__section--offers">
@@ -153,6 +179,9 @@ export default class PointEditView extends AbstractView {
 
     this.element
       .querySelector('.event__save-btn')
+      .addEventListener('click', this.#submitHandler);
+    this.element
+      .querySelector('.event__rollup-btn')
       .addEventListener('click', this.#submitHandler);
   }
 

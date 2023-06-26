@@ -1,4 +1,4 @@
-const TYPES = ['Taxi', 'Bus', 'Train', 'Ship', 'Drive', 'Flight', 'Check-in', 'Sightseeing', 'Restaurant'];
+const TYPES = ['taxi', 'bus', 'train', 'ship', 'drive', 'flight', 'check-in', 'sightseeing', 'restaurant'];
 const CITIES = ['Geneva', 'Amsterdam', 'Chamonix', 'Rotterdam', 'Helmond', 'Breda'];
 const Price = {
   MIN: 1,
@@ -39,4 +39,34 @@ const FilterType = {
   PRESENT: 'present',
   PAST: 'past'
 };
-export {DESCRIPTION, TYPES, CITIES, Price, Duration, MSEC_IN_SEC, SEC_IN_MIN, MIN_IN_HOUR, HOUR_IN_DAY, DESTINATION_COUNT, OFFER_COUNT, POINT_COUNT, POINT_EMPTY, FilterType};
+
+const Mode = {
+  DEFAULT: 'DEFAULT',
+  EDITING: 'EDITING'
+}
+
+const SortType = {
+  DAY: 'day',
+  EVENT: 'event',
+  TIME: 'time',
+  PRICE: 'price',
+  OFFER: 'offer'
+}
+export {
+  DESCRIPTION,
+  TYPES,
+  CITIES,
+  Price,
+  Duration,
+  MSEC_IN_SEC,
+  SEC_IN_MIN,
+  MIN_IN_HOUR,
+  HOUR_IN_DAY,
+  DESTINATION_COUNT,
+  OFFER_COUNT,
+  POINT_COUNT,
+  POINT_EMPTY,
+  FilterType,
+  Mode,
+  SortType
+};
