@@ -40,7 +40,7 @@ function formatStringToShortDate(date) {
 }
 
 function formatStringToHours(date) {
-  return dayjs(date).format('HH-mm');
+  return dayjs(date).format('HH:mm');
 }
 
 function getPointDuration(dateFrom, dateTo) {
@@ -78,6 +78,14 @@ function isPointPast(point) {
   return dayjs().isAfter(point.dateTo);
 }
 
+function getOfferClass(title) {
+  return title.trim().toLowerCase().replace(/[^a-zA-Z0-9 -]/, '').replace(/\s/g, '-');
+}
+
+function getTypeLabel(event) {
+  return event.charAt(0).toUpperCase() + event.slice(1);
+}
+
 export {
   getPointDuration,
   formatStringToDateTime,
@@ -88,5 +96,7 @@ export {
   formatStringToCapital,
   isPointFuture,
   isPointPresent,
-  isPointPast
+  isPointPast,
+  getOfferClass,
+  getTypeLabel
 };

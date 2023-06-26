@@ -60,17 +60,18 @@ export default class BoardPresenter {
     this.#pointPresenters.clear();
   };
 
-  #renderSort = (container) => {
+  #renderSort = () => {
     const prevSortComponent = this.#sortComponent;
     this.#sortComponent = new TripSortPointView({
       sortType: this.#currentSortType,
       onSortTypeChange: this.#sortTypeChangeHandler
     });
+
     if (prevSortComponent) {
       replace(this.#sortComponent, prevSortComponent);
       remove(prevSortComponent);
     } else {
-      render(this.#sortComponent, container);
+      render(this.#sortComponent, this.#boardContainer);
     }
   };
 
@@ -84,9 +85,10 @@ export default class BoardPresenter {
       render(new NoPointView(), this.#boardContainer);
       return;
     }
-    this.#renderSort(this.#boardContainer);
+
+    this.#renderSort();
     this.#renderPointContainer();
-    this.#renderPoint();
+    this.#renderPoints();
   };
 
   #pointChangeHandler = (updatedPoint) => {
@@ -97,7 +99,7 @@ export default class BoardPresenter {
   #sortTypeChangeHandler = (sortType) => {
     this.#sortPoints(sortType);
     this.#clearPoints();
-    this.#renderSort(this.#boardContainer);
+    this.#renderSort();
     this.#renderPoints();
   };
 

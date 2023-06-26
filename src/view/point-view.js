@@ -1,13 +1,15 @@
 import AbstractView from '../framework/view/abstract-view.js';
 import {formatStringToDateTime, formatStringToShortDate, formatStringToHours, getPointDuration} from '../utils/point.js';
 
-function createOffersTemplate({pointOffersByType, offers}) {
-  if (pointOffersByType.length === 0) {
+function createOffersTemplate({pointOffers, offers}) {
+  if (pointOffers.length === 0) {
     return '';
   }
-  return pointOffersByType.map((typeOffer) => {
+
+  return pointOffers.map((typeOffer) => {
     offers.includes(typeOffer.id);
     const checked = offers.includes(typeOffer.id);
+
     if (!checked) {
       return '';
     }
@@ -21,10 +23,10 @@ function createOffersTemplate({pointOffersByType, offers}) {
   }).join('');
 }
 
-function createPointTemplate({point, pointDestination, pointOffersByType}) {
+function createPointTemplate({point, pointDestinations, pointOffers}) {
   const {basePrice, dateFrom, dateTo, offers, isFavorite, type, typeImg = type.toLowerCase()} = point;
-  const favoriteButton = (isFavorite) ? 'event__favorite-btn--active' : '';
-  const {name} = pointDestination;
+  const favoriteButtonClass = (isFavorite) ? 'event__favorite-btn--active' : '';
+  const {name} = pointDestinations;
 
   return (
     `<li class="trip-events__item">
@@ -47,9 +49,9 @@ function createPointTemplate({point, pointDestination, pointOffersByType}) {
         </p>
         <h4 class="visually-hidden">Offers:</h4>
         <ul class="event__selected-offers">
-          ${createOffersTemplate({pointOffersByType, offers})}
+          ${createOffersTemplate({pointOffers, offers})}
         </ul>
-        <button class="event__favorite-btn ${favoriteButton}" type="button">
+        <button class="event__favorite-btn ${favoriteButtonClass}" type="button">
           <span class="visually-hidden">Add to favorite</span>
           <svg class="event__favorite-icon" width="28" height="28" viewBox="0 0 28 28">
             <path d="M14 21l-8.22899 4.3262 1.57159-9.1631L.685209 9.67376 9.8855 8.33688 14 0l4.1145 8.33688 9.2003 1.33688-6.6574 6.48934 1.5716 9.1631L14 21z"/>
@@ -65,19 +67,18 @@ function createPointTemplate({point, pointDestination, pointOffersByType}) {
 
 export default class PointView extends AbstractView {
   #point = null;
-  #pointDestination = null;
-  #pointOffersByType = null;
+  #pointDestinations = null;
+  #pointOffers = null;
   #onEditClick = null;
   #onFavoriteClick = null;
 
-  constructor({point, pointDestination, pointOffersByType, onEditClick, onFavoriteClick}) {
+  constructor({point, pointDestinations, pointOffers, onEditClick, onFavoriteClick}) {
     super();
     this.#point = point;
-    this.#pointDestination = pointDestination;
-    this.#pointOffersByType = pointOffersByType;
+    this.#pointDestinations = pointDestinations;
+    this.#pointOffers = pointOffers;
     this.#onEditClick = onEditClick;
     this.#onFavoriteClick = onFavoriteClick;
-    console.log(pointOffersByType);
     this.element
       .querySelector('.event__rollup-btn')
       .addEventListener('click', this.#editClickHandler);
@@ -89,8 +90,8 @@ export default class PointView extends AbstractView {
   get template() {
     return createPointTemplate({
       point: this.#point,
-      pointDestination: this.#pointDestination,
-      pointOffers: this.#pointOffersByType
+      pointDestinations: this.#pointDestinations,
+      pointOffers: this.#pointOffers
     });
   }
 

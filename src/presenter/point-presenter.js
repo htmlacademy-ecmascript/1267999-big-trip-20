@@ -10,8 +10,8 @@ export default class PointPresenter {
   #destinationsModel = null;
   #offersModel = null;
 
-  #onChangeData = null;
-  #onChangeMode = null;
+  #handleDataChange = null;
+  #handleModeChange = null;
 
   #pointComponent = null;
   #pointEditComponent = null;
@@ -22,15 +22,14 @@ export default class PointPresenter {
     this.#container = container;
     this.#destinationsModel = destinationsModel;
     this.#offersModel = offersModel;
-    this.#onChangeData = onChangeData;
-    this.#onChangeMode = onChangeMode;
+    this.#handleDataChange = onChangeData;
+    this.#handleModeChange = onChangeMode;
   }
   init(point) {
     this.#point = point;
 
     const prevPointComponent = this.#pointComponent;
     const prevPointEditComponent = this.#pointEditComponent;
-
     this.#pointComponent = new PointView({
       point: this.#point,
       pointDestinations: this.#destinationsModel.getById(point.destination),
@@ -46,14 +45,14 @@ export default class PointPresenter {
       onResetClick: this.#resetButtonClickHandler,
       onSubmitClick: this.#formSubmitHandler
     });
-
+    console.log(prevPointComponent);
+    console.log({prevPointEditComponent});
     if (prevPointComponent === null || prevPointEditComponent === null) {
-      render(this.#pointComponent, prevPointComponent);
+      render(this.#pointComponent, this.#container);
       return;
     }
-
     if (this.#mode === Mode.DEFAULT) {
-      replace(this.#pointComponent, prevPointEditComponent);
+      replace(this.#pointComponent, prevPointComponent);
     }
 
     if (this.#mode === Mode.EDITING) {
@@ -78,7 +77,7 @@ export default class PointPresenter {
   #replacePointToForm = () => {
     replace(this.#pointEditComponent, this.#pointComponent);
     document.addEventListener('keydown', this.#escKeyDownHandler);
-    this.#onChangeMode();
+    this.#handleModeChange();
     this.#mode = Mode.EDITING;
   };
 
@@ -100,7 +99,7 @@ export default class PointPresenter {
   };
 
   #favoriteClickHandler = () => {
-    this.#onChangeData({
+    this.#handleDataChange({
       ...this.#point,
       isFavorite: !this.#point.isFavorite
     });
@@ -110,8 +109,7 @@ export default class PointPresenter {
     this.#replaceFormToPoint();
   };
 
-  #formSubmitHandler = (point) => {
-    this.#onChangeData(point);
+  #formSubmitHandler = () => {
     this.#replaceFormToPoint();
   }
 }
