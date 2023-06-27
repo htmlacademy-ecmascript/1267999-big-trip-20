@@ -25,6 +25,7 @@ export default class PointPresenter {
     this.#handleDataChange = onChangeData;
     this.#handleModeChange = onChangeMode;
   }
+
   init(point) {
     this.#point = point;
 
@@ -45,12 +46,12 @@ export default class PointPresenter {
       onResetClick: this.#resetButtonClickHandler,
       onSubmitClick: this.#formSubmitHandler
     });
-    console.log(prevPointComponent);
-    console.log({prevPointEditComponent});
+
     if (prevPointComponent === null || prevPointEditComponent === null) {
       render(this.#pointComponent, this.#container);
       return;
     }
+
     if (this.#mode === Mode.DEFAULT) {
       replace(this.#pointComponent, prevPointComponent);
     }
@@ -111,5 +112,5 @@ export default class PointPresenter {
 
   #formSubmitHandler = () => {
     this.#replaceFormToPoint();
-  }
+  };
 }

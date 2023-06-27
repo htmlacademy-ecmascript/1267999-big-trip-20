@@ -9,7 +9,7 @@ dayjs.extend(relativeTime);
 function sortByTime (pointPrevious, pointNext) {
   const durationA = dayjs(pointPrevious.dateTo).diff(dayjs(pointPrevious.dateFrom));
   const durationB = dayjs(pointNext.dateTo).diff(dayjs(pointNext.dateFrom));
-  return pointNext - pointPrevious;
+  return durationA - durationB;
 }
 
 function sortByPrice (pointNext, pointPrevious) {

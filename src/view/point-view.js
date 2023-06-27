@@ -84,7 +84,7 @@ export default class PointView extends AbstractView {
       .addEventListener('click', this.#editClickHandler);
     this.element
       .querySelector('.event__favorite-icon')
-      .addEventListener('click', this.#favoriteClick)
+      .addEventListener('click', this.#favoriteClick);
   }
 
   get template() {

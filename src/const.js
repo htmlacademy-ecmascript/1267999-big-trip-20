@@ -43,7 +43,7 @@ const FilterType = {
 const Mode = {
   DEFAULT: 'DEFAULT',
   EDITING: 'EDITING'
-}
+};
 
 const SortType = {
   DAY: 'day',
@@ -51,7 +51,8 @@ const SortType = {
   TIME: 'time',
   PRICE: 'price',
   OFFER: 'offer'
-}
+};
+
 export {
   DESCRIPTION,
   TYPES,
