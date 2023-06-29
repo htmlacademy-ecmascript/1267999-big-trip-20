@@ -1,24 +1,5 @@
-import dayjs from 'dayjs';
-import duration from 'dayjs/plugin/duration';
-import relativeTime from 'dayjs/plugin/relativeTime';
 import {SortType} from '../const';
-
-dayjs.extend(duration);
-dayjs.extend(relativeTime);
-
-function sortByTime (pointPrevious, pointNext) {
-  const durationA = dayjs(pointPrevious.dateTo).diff(dayjs(pointPrevious.dateFrom));
-  const durationB = dayjs(pointNext.dateTo).diff(dayjs(pointNext.dateFrom));
-  return durationA - durationB;
-}
-
-function sortByPrice (pointNext, pointPrevious) {
-  return pointPrevious.basePrice - pointNext.basePrice;
-}
-
-function sortByDay (pointA, pointB) {
-  return dayjs(pointA.dateFrom).diff(dayjs(pointB.dateFrom));
-}
+import {getPointsDateDifference, getPointsDurationDifference, getPointsPriceDifference} from './point.js';
 
 if (!Array.prototype.toSorted) {
   Array.prototype.toSorted = function (fn) {
@@ -27,9 +8,9 @@ if (!Array.prototype.toSorted) {
 }
 
 const sort = {
-  [SortType.DAY]: (points) => points.toSorted(sortByDay),
-  [SortType.PRICE]: (points) => points.toSorted(sortByPrice),
-  [SortType.TIME]: (points) => points.toSorted(sortByTime),
+  [SortType.DAY]: (points) => points.toSorted(getPointsDateDifference),
+  [SortType.PRICE]: (points) => points.toSorted(getPointsPriceDifference),
+  [SortType.TIME]: (points) => points.toSorted(getPointsDurationDifference),
   [SortType.EVENT]: () => {
     throw new Error(`Sort by ${SortType.EVENT} is not implemented`);
   },
@@ -38,4 +19,4 @@ const sort = {
   }
 };
 
-export {sortByTime, sortByPrice, sortByDay, sort};
+export {sort};

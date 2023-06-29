@@ -38,7 +38,7 @@ function createTripSortPointView({sortMap}) {
 
 export default class TripSortPointView extends AbstractView {
   #sortMap = null;
-  #handleSortTypeChange = null;
+  #onSortTypeChange = null;
 
   constructor ({sortType, onSortTypeChange}) {
     super();
@@ -49,7 +49,7 @@ export default class TripSortPointView extends AbstractView {
         isDisabled: !enabledSortType[type]
       }));
 
-    this.#handleSortTypeChange = onSortTypeChange;
+    this.#onSortTypeChange = onSortTypeChange;
     this.element.addEventListener('click', this.#sortTypeChangeHandler);
   }
 
@@ -62,6 +62,6 @@ export default class TripSortPointView extends AbstractView {
       return;
     }
     evt.preventDefault();
-    this.#handleSortTypeChange(evt.target.dataset.SortType);
+    this.#onSortTypeChange(evt.target.dataset.sortType);
   };
 }

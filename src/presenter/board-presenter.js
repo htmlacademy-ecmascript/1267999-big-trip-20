@@ -28,6 +28,7 @@ export default class BoardPresenter {
     this.#destinationsModel = destinationsModel;
     this.#offersModel = offersModel;
     this.#pointsModel = pointsModel;
+
     this.#points = sort[SortType.DAY]([...this.#pointsModel.points]);
   }
 
@@ -63,6 +64,7 @@ export default class BoardPresenter {
 
   #renderSort = () => {
     const prevSortComponent = this.#sortComponent;
+
     this.#sortComponent = new TripSortPointView({
       sortType: this.#currentSortType,
       onSortTypeChange: this.#sortTypeChangeHandler

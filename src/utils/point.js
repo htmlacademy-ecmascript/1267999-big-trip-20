@@ -86,6 +86,21 @@ function getTypeLabel(event) {
   return event.charAt(0).toUpperCase() + event.slice(1);
 }
 
+function getPointsDateDifference(pointA, pointB) {
+  return new Date(pointA.dateFrom) - new Date(pointB.dateFrom);
+}
+
+function getPointsDurationDifference(pointA, pointB) {
+  const durationA = new Date(pointA.dateTo) - new Date(pointA.dateFrom);
+  const durationB = new Date(pointB.dateTo) - new Date(pointB.dateFrom);
+
+  return durationB - durationA;
+}
+
+function getPointsPriceDifference(pointA, pointB) {
+  return pointB.basePrice - pointA.basePrice;
+}
+
 export {
   getPointDuration,
   formatStringToDateTime,
@@ -98,5 +113,8 @@ export {
   isPointPresent,
   isPointPast,
   getOfferClass,
-  getTypeLabel
+  getTypeLabel,
+  getPointsDateDifference,
+  getPointsDurationDifference,
+  getPointsPriceDifference
 };
