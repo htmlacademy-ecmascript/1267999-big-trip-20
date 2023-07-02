@@ -85,6 +85,20 @@ function getOfferClass(title) {
 function getTypeLabel(event) {
   return event.charAt(0).toUpperCase() + event.slice(1);
 }
+function getPointsDateDifference(pointA, pointB) {
+  return Date.parse(pointA.dateFrom) - Date.parse(pointB.dateFrom);
+}
+
+function getPointsDurationDifference(pointA, pointB) {
+  const durationA = Date.parse(pointA.dateTo) - Date.parse(pointA.dateFrom);
+  const durationB = Date.parse(pointB.dateTo) - Date.parse(pointB.dateFrom);
+
+  return durationA - durationB;
+}
+
+function getPointsPriceDifference(pointA, pointB) {
+  return pointA.basePrice - pointB.basePrice;
+}
 
 export {
   getPointDuration,
@@ -98,5 +112,8 @@ export {
   isPointPresent,
   isPointPast,
   getOfferClass,
-  getTypeLabel
+  getTypeLabel,
+  getPointsDateDifference,
+  getPointsDurationDifference,
+  getPointsPriceDifference
 };
