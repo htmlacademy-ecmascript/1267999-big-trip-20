@@ -4,7 +4,7 @@ import PointListView from '../view/point-list-view.js';
 import NoPointView from '../view/no-point-view.js';
 
 import {updateItem} from '../utils/common.js';
-import {sort} from '../utils/sort.js';
+import {sortRules} from '../utils/sort.js';
 import {render, replace, remove} from '../framework/render.js';
 import {SortType} from '../const.js';
 
@@ -29,7 +29,7 @@ export default class BoardPresenter {
     this.#offersModel = offersModel;
     this.#pointsModel = pointsModel;
 
-    this.#points = sort[SortType.DAY]([...this.#pointsModel.points]);
+    this.#points = sortRules[SortType.DAY]([...this.#pointsModel.points]);
   }
 
   init() {
@@ -50,7 +50,7 @@ export default class BoardPresenter {
 
   #sortPoints = (sortType) => {
     this.#currentSortType = sortType;
-    this.#points = sort[this.#currentSortType](this.#points);
+    this.#points = sortRules[this.#currentSortType](this.#points);
   };
 
   #renderPoints = () => {
