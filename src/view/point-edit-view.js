@@ -1,4 +1,4 @@
-import AbstractView from '../framework/view/abstract-view.js';
+import AbstractStatefulView from '../framework/view/abstract-stateful-view.js';
 import {POINT_EMPTY, TYPES} from '../const.js';
 import {getCurrentDate, getOfferClass, getTypeLabel} from '../utils/point.js';
 
@@ -164,38 +164,137 @@ function createPointEditTemplate({point, pointDestinations, pointOffers}) {
 }
 
 
-export default class PointEditView extends AbstractView {
-  #point = null;
+export default class PointEditView extends AbstractStatefulView {
   #pointDestinations = null;
   #pointOffers = null;
+  #onResetClick = null;
   #onSubmitClick = null;
 
   constructor({point = POINT_EMPTY, pointDestinations, pointOffers, onSubmitClick}) {
     super();
-    this.#point = point;
+    this._setState(PointEditView.parsePointToState({point}));
     this.#pointDestinations = pointDestinations;
     this.#pointOffers = pointOffers;
+
     this.#onSubmitClick = onSubmitClick;
 
-    this.element
-      .querySelector('.event__save-btn')
-      .addEventListener('click', this.#submitHandler);
-    this.element
-      .querySelector('.event__rollup-btn')
-      .addEventListener('click', this.#submitHandler);
+    this._restoreHandlers();
   }
 
   get template() {
     return createPointEditTemplate({
-      point: this.#point,
+      point: this._state.point,
       pointDestinations: this.#pointDestinations,
-      pointOffers: this.#pointOffers,
+      pointOffers: this.#pointOffers
     });
+  }
+
+  _restoreHandlers() {
+    this.element
+      .querySelector('.event__save-btn')
+      .addEventListener('click', this.#submitHandler);
+
+    this.element
+      .querySelector('.event__rollup-btn')
+      .addEventListener('click', this.#submitHandler);
+
+    this.element
+      .querySelector('form')
+      .addEventListener('submit', this.#formSubmitHandler);
+
+    this.element
+      .querySelectorAll('.event__type-input')
+      .forEach((element) => {
+        element.addEventListener('change', this.#typeInputClick);
+      });
+
+    this.element
+      .querySelector('.event__input--destination')
+      .addEventListener('change', this.#destinationInputChange);
+
+    const offerBlock = this.element
+      .querySelector('.event__available-offers');
+
+    if (offerBlock) {
+      offerBlock.addEventListener('change', this.#offersClickHandler);
+    }
+
+    this.element.querySelector('.event__input--price')
+      .addEventListener('change', this.#priceInputHandler);
   }
 
   #submitHandler = (evt) => {
     evt.preventDefault();
     this.#onSubmitClick();
   };
+
+  #formSubmitHandler = (evt) => {
+    evt.preventDefault();
+    this.#onSubmitClick(PointEditView.parsePointToState(this._state));
+  };
+
+  #typeInputClick = (evt) => {
+    evt.preventDefault();
+
+    this.updateElement({
+      point: {
+        ...this._state.point,
+        type: evt.target.value,
+        offers: []
+      }
+    });
+  };
+
+  #destinationInputChange = (evt) => {
+    evt.preventDefault();
+
+    const newDestinationName = evt.target.value;
+    const newDestination = this.#pointDestinations.find((destination) => destination.name === newDestinationName);
+
+    if (newDestination) {
+
+      this.updateElement({
+        point: {
+          ...this._state.point,
+          destination: newDestination.id
+        }
+      });
+    }
+  };
+
+  #offersClickHandler = (evt) => {
+    evt.preventDefault();
+
+    const checkedBoxes = Array.from(this.element
+      .querySelectorAll('.event__offer-checkbox:checked'));
+
+    const offersId = checkedBoxes.map((offer) => offer.dataset.offerId);
+
+    this._setState({
+      point: {
+        ...this._state.point,
+        offers: offersId
+      }
+    });
+  };
+
+  #priceInputHandler = (evt) => {
+    evt.preventDefault();
+
+    this._setState({
+      point: {
+        ...this._state.point,
+        basePrice: evt.target.valueAsNumber
+      }
+    });
+  };
+
+  static parsePointToState(point) {
+    return {...point};
+  }
+
+  static parseStateToPoint(state) {
+    return {...state};
+  }
 }
 
