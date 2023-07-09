@@ -91,6 +91,7 @@ export default class PointPresenter {
   #escKeyDownHandler = (evt) => {
     if (evt.key === 'Escape' || evt.key === 'Esc') {
       evt.preventDefault();
+      this.#pointEditComponent.reset(this.#point);
       this.#replaceFormToPoint();
     }
   };
@@ -107,10 +108,12 @@ export default class PointPresenter {
   };
 
   #resetButtonClickHandler = () => {
+    this.#pointEditComponent.reset(this.#point);
     this.#replaceFormToPoint();
   };
 
-  #formSubmitHandler = () => {
+  #formSubmitHandler = (point) => {
+    this.#handleDataChange(point);
     this.#replaceFormToPoint();
   };
 }
