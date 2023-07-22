@@ -21,7 +21,7 @@ const DESCRIPTION = [
   'Sed sed nisi sed augue convallis suscipit in sed felis.'
 ];
 const DESTINATION_COUNT = 5;
-const OFFER_COUNT = 3;
+const OFFER_COUNT = 5;
 const POINT_COUNT = 5;
 const DEFAULT_TYPE = 'Flight';
 const POINT_EMPTY = {

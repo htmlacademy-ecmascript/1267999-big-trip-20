@@ -34,7 +34,7 @@ export default class PointPresenter {
     this.#pointComponent = new PointView({
       point: this.#point,
       pointDestinations: this.#destinationsModel.getById(point.destination),
-      pointOffers: this.#offersModel.getByType(point.type),
+      allOffers: this.#offersModel.getByType(point.type),
       onEditClick: this.#editClickHandler,
       onFavoriteClick: this.#favoriteClickHandler
     });
@@ -42,7 +42,7 @@ export default class PointPresenter {
     this.#pointEditComponent = new PointEditView({
       point: this.#point,
       pointDestinations: this.#destinationsModel.destinations,
-      pointOffers: this.#offersModel.offers,
+      allOffers: this.#offersModel.offers,
       onResetClick: this.#resetButtonClickHandler,
       onSubmitClick: this.#formSubmitHandler
     });
