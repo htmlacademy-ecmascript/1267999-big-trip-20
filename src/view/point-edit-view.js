@@ -1,3 +1,4 @@
+import he from 'he';
 import flatpickr from 'flatpickr';
 import AbstractStatefulView from '../framework/view/abstract-stateful-view.js';
 import {POINT_EMPTY, TYPES} from '../const.js';
@@ -127,7 +128,7 @@ function createPointEditTemplate({point, pointDestinations, allOffers}) {
              id="event-destination-1"
              type="text"
              name="event-destination"
-             value="${destinationById.name}"
+             value="${he.encode(destinationById.name)}"
              list="destination-list-1"
             >
             <datalist id="destination-list-1">
@@ -142,7 +143,7 @@ function createPointEditTemplate({point, pointDestinations, allOffers}) {
               id="event-start-time-1"
               type="text"
               name="event-start-time"
-              value="${getCurrentDate(dateFrom)}"
+              value="${he.encode(getCurrentDate(dateFrom))}"
             >
             &mdash;
             <label class="visually-hidden" for="event-end-time-1">To</label>
@@ -150,7 +151,7 @@ function createPointEditTemplate({point, pointDestinations, allOffers}) {
               class="event__input event__input--time"
               id="event-end-time-1"
               type="text" name="event-end-time"
-              value="${getCurrentDate(dateTo)}"
+              value="${he.encode(getCurrentDate(dateTo))}"
             >
           </div>
 
@@ -159,7 +160,7 @@ function createPointEditTemplate({point, pointDestinations, allOffers}) {
               <span class="visually-hidden">Price</span>
               &euro;
             </label>
-            <input class="event__input  event__input--price" id="event-price-1" type="text" name="event-price" value="${basePrice}">
+            <input class="event__input  event__input--price" id="event-price-1" type="text" name="event-price" value="${he.encode(String(basePrice))}">
           </div>
 
           <button class="event__save-btn  btn  btn--blue" type="submit">Save</button>
@@ -192,10 +193,11 @@ export default class PointEditView extends AbstractStatefulView {
   #allOffers = null;
   #onResetClick = null;
   #onSubmitClick = null;
+  #onDeleteClick = null;
   #datepickerFrom = null;
   #datepickerTo = null;
 
-  constructor({point = POINT_EMPTY, pointDestinations, allOffers, onSubmitClick, onResetClick}) {
+  constructor({point = POINT_EMPTY, pointDestinations, allOffers, onSubmitClick, onResetClick, onDeleteClick}) {
     super();
     this._setState(PointEditView.parsePointToState(point));
     this.#pointDestinations = pointDestinations;
@@ -203,6 +205,7 @@ export default class PointEditView extends AbstractStatefulView {
 
     this.#onResetClick = onResetClick;
     this.#onSubmitClick = onSubmitClick;
+    this.#onDeleteClick = onDeleteClick;
 
     this._restoreHandlers();
   }
@@ -262,6 +265,10 @@ export default class PointEditView extends AbstractStatefulView {
     this.element
       .querySelector('.event__input--price')
       .addEventListener('change', this.#priceInputHandler);
+
+    this.element
+      .querySelector('.event__reset-btn')
+      .addEventListener('click', this.#formDeleteClickHandler);
 
     this.#setDatepickers();
   }
@@ -328,6 +335,11 @@ export default class PointEditView extends AbstractStatefulView {
       dateTo: userDate,
     });
     this.#datepickerFrom.set('maxDate', this._state.dateTo);
+  };
+
+  #formDeleteClickHandler = (evt) => {
+    evt.preventDefault();
+    this.#onDeleteClick(PointEditView.parseStateToPoint(this._state));
   };
 
   #setDatepickers = () => {

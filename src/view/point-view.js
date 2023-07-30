@@ -3,6 +3,7 @@ import {formatStringToDateTime, formatStringToShortDate, formatStringToHours, ge
 
 function createOffersTemplate({allOffers, offers}) {
   if (allOffers.length === 0) {
+
     return '';
   }
 
@@ -11,8 +12,10 @@ function createOffersTemplate({allOffers, offers}) {
     const checked = offers.includes(typeOffer.id);
 
     if (!checked) {
+
       return '';
     }
+
     return (`
       <li class="event__offer">
         <span class="event__offer-title">${typeOffer.title}</span>
