@@ -9,14 +9,18 @@ import DestinationsModel from './model/destinations-model.js';
 import OffersModel from './model/offers-model.js';
 import PointsModel from './model/points-model.js';
 import FilterModel from './model/filter-model.js';
+import PointsApiService from './point-api-service.js';
+
+import {AUTHORIZATION, END_POINT} from './const.js';
 
 const siteMainElement = document.querySelector('.trip-main');
 const siteTripPointElement = document.querySelector('.trip-events');
+const pointsApiService = new PointsApiService(END_POINT, AUTHORIZATION);
 
 const mockService = new MockService();
-const destinationsModel = new DestinationsModel(mockService);
-const offersModel = new OffersModel(mockService);
-const pointsModel = new PointsModel(mockService);
+const destinationsModel = new DestinationsModel({pointsApiService});
+const offersModel = new OffersModel({pointsApiService});
+const pointsModel = new PointsModel({pointsApiService});
 const filterModel = new FilterModel();
 
 const filterPresenter = new FilterPresenter({
@@ -52,3 +56,6 @@ render(new TripInfoView(), siteMainElement);
 filterPresenter.init();
 render(newPointButtonComponent, siteMainElement);
 boardPresenter.init();
+pointsModel.init();
+offersModel.init();
+destinationsModel.init();

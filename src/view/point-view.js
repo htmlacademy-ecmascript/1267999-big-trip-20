@@ -2,6 +2,7 @@ import AbstractView from '../framework/view/abstract-view.js';
 import {formatStringToDateTime, formatStringToShortDate, formatStringToHours, getPointDuration} from '../utils/point.js';
 
 function createOffersTemplate({allOffers, offers}) {
+
   if (allOffers.length === 0) {
 
     return '';
@@ -30,6 +31,8 @@ function createPointTemplate({point, pointDestinations, allOffers}) {
   const {basePrice, dateFrom, dateTo, offers, isFavorite, type, typeImg = type.toLowerCase()} = point;
   const favoriteButtonClass = (isFavorite) ? 'event__favorite-btn--active' : '';
   const {name} = pointDestinations;
+  console.log(allOffers);
+  console.log(pointDestinations);
 
   return (
     `<li class="trip-events__item">

@@ -96,7 +96,7 @@ function createImageItem(point, pointDestinations) {
   }).join('');
 }
 
-function createPointEditTemplate({point, pointDestinations, allOffers}) {
+function createPointEditTemplate({point, pointDestinations, allOffers, isEditeMode}) {
   const {basePrice, dateFrom, dateTo, offers, type, destination, typeImg = type.toLowerCase()} = point;
   const destinationById = pointDestinations.find((itemDestination) => itemDestination.id === destination);
 
@@ -160,7 +160,7 @@ function createPointEditTemplate({point, pointDestinations, allOffers}) {
               <span class="visually-hidden">Price</span>
               &euro;
             </label>
-            <input class="event__input  event__input--price" id="event-price-1" type="text" name="event-price" value="${he.encode(String(basePrice))}">
+            <input class="event__input  event__input--price" id="event-price-1" type="text" name="event-price" value="${he.encode(`${basePrice}`)}">
           </div>
 
           <button class="event__save-btn  btn  btn--blue" type="submit">Save</button>
@@ -196,8 +196,17 @@ export default class PointEditView extends AbstractStatefulView {
   #onDeleteClick = null;
   #datepickerFrom = null;
   #datepickerTo = null;
+  #isEditeMode = null;
 
-  constructor({point = POINT_EMPTY, pointDestinations, allOffers, onSubmitClick, onResetClick, onDeleteClick}) {
+  constructor({
+    point = POINT_EMPTY,
+    pointDestinations,
+    allOffers,
+    onSubmitClick,
+    onResetClick,
+    onDeleteClick,
+    isEditeMode = true
+  }) {
     super();
     this._setState(PointEditView.parsePointToState(point));
     this.#pointDestinations = pointDestinations;
@@ -206,6 +215,7 @@ export default class PointEditView extends AbstractStatefulView {
     this.#onResetClick = onResetClick;
     this.#onSubmitClick = onSubmitClick;
     this.#onDeleteClick = onDeleteClick;
+    this.#isEditeMode = isEditeMode;
 
     this._restoreHandlers();
   }
@@ -214,7 +224,8 @@ export default class PointEditView extends AbstractStatefulView {
     return createPointEditTemplate({
       point: this._state,
       pointDestinations: this.#pointDestinations,
-      allOffers: this.#allOffers
+      allOffers: this.#allOffers,
+      isEditeMode: this.#isEditeMode
     });
   }
 
@@ -317,9 +328,8 @@ export default class PointEditView extends AbstractStatefulView {
 
   #priceInputHandler = (evt) => {
     evt.preventDefault();
-
     this._setState({
-      basePrice: evt.target.valueAsNumber,
+      basePrice: evt.target.value,
     });
   };
 

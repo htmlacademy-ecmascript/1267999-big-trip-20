@@ -37,7 +37,7 @@ export default class FilterPresenter extends Observable {
     this.#filterComponent = new TripFiltersView({
       filters: this.filters,
       currentFilterType: this.#filterModel.filter,
-      onFilterTypeChange: this.#handleFilterTypeChange
+      onFilterTypeChange: this.#handleFilterTypeChange,
     });
 
     if (prevFilterComponent === null) {

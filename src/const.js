@@ -56,13 +56,32 @@ const SortType = {
 const UserAction = {
   UPDATE_POINT: 'UPDATE_POINT',
   ADD_POINT: 'ADD_POINT',
-  DELETE_POINT: 'DELETE_POINT',
+  DELETE_POINT: 'DELETE_POINT'
 };
 
 const UpdateType = {
   PATCH: 'PATCH',
   MINOR: 'MINOR',
   MAJOR: 'MAJOR',
+  INIT: 'INIT'
+
+};
+
+const AUTHORIZATION = 'Basic su9jkskKisSkmS9rsS';
+
+const END_POINT = 'https://20.ecmascript.pages.academy/big-trip';
+
+const Method = {
+  GET: 'GET',
+  POST: 'POST',
+  PUT: 'PUT',
+  DELETE: 'DELETE'
+};
+
+const Url = {
+  POINTS: 'points',
+  DESTINATIONS: 'destinations',
+  OFFERS: 'offers'
 };
 
 export {
@@ -83,5 +102,9 @@ export {
   Mode,
   SortType,
   UserAction,
-  UpdateType
+  UpdateType,
+  AUTHORIZATION,
+  END_POINT,
+  Method,
+  Url
 };

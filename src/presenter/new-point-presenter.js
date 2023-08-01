@@ -5,7 +5,6 @@ import {UserAction, UpdateType} from '../const.js';
 
 export default class NewPointPresenter {
   #container = null;
-  #point = null;
   #destinationsModel = null;
   #offersModel = null;
 
@@ -20,7 +19,7 @@ export default class NewPointPresenter {
     this.#handleDestroy = onDestroy;
   }
 
-  init(point, destinationsModel, offersModel) {
+  init({destinationsModel, offersModel}) {
     this.#destinationsModel = destinationsModel;
     this.#offersModel = offersModel;
 
@@ -29,10 +28,11 @@ export default class NewPointPresenter {
     }
 
     this.#pointEditComponent = new PointEditView({
-      pointDestinations: this.#destinationsModel,
-      allOffers: this.#offersModel,
+      pointDestinations: this.#destinationsModel.destinations,
+      allOffers: this.#offersModel.offers,
       onSubmitClick: this.#formSubmitHandler,
-      onDeleteClick: this.#deleteClickHandler
+      onDeleteClick: this.#deleteClickHandler,
+      isEditeMode: false
     });
 
     render(this.#pointEditComponent, this.#container, RenderPosition.AFTERBEGIN);
@@ -56,7 +56,7 @@ export default class NewPointPresenter {
   #formSubmitHandler = (point) => {
     this.#handleDataChange(
       UserAction.ADD_POINT,
-      UpdateType.MINOR,
+      UpdateType.MAJOR,
       {id: nanoid(), ...point},
     );
     this.destroy();
