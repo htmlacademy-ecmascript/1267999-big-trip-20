@@ -60,10 +60,11 @@ export default class BoardPresenter {
     this.#renderBoard();
   }
 
-  createPoint() {
+  createPoint(point) {
     this.#currentSortType = SortType.DAY;
     this.#filterModel.setFilter(UpdateType.MAJOR, FilterType.EVERYTHING);
     this.#newPointComponent.init({
+      point,
       destinationsModel: this.#destinationsModel,
       offersModel: this.#offersModel
     });

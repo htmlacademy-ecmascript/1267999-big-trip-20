@@ -117,7 +117,7 @@ export default class PointPresenter {
     this.#handleDataChange(
       UserAction.UPDATE_POINT,
       UpdateType.MINOR,
-      point,
+      point
     );
     this.#replaceFormToPoint();
   };
@@ -126,7 +126,7 @@ export default class PointPresenter {
     this.#handleDataChange(
       UserAction.DELETE_POINT,
       UpdateType.MINOR,
-      point,
+      point
     );
   };
 }

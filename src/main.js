@@ -4,7 +4,6 @@ import NewPointButtonView from './view/new-point-button-view.js';
 import FilterPresenter from './presenter/filter-presenter.js';
 import BoardPresenter from './presenter/board-presenter.js';
 
-import MockService from './service/mock-service.js';
 import DestinationsModel from './model/destinations-model.js';
 import OffersModel from './model/offers-model.js';
 import PointsModel from './model/points-model.js';
@@ -17,7 +16,6 @@ const siteMainElement = document.querySelector('.trip-main');
 const siteTripPointElement = document.querySelector('.trip-events');
 const pointsApiService = new PointsApiService(END_POINT, AUTHORIZATION);
 
-const mockService = new MockService();
 const destinationsModel = new DestinationsModel({pointsApiService});
 const offersModel = new OffersModel({pointsApiService});
 const pointsModel = new PointsModel({pointsApiService});
@@ -54,8 +52,12 @@ function handleNewPointButtonClick() {
 
 render(new TripInfoView(), siteMainElement);
 filterPresenter.init();
-render(newPointButtonComponent, siteMainElement);
-boardPresenter.init();
-pointsModel.init();
-offersModel.init();
-destinationsModel.init();
+
+Promise.all([offersModel.init(), destinationsModel.init()])
+  .then(() => pointsModel.init()
+    .finally(() => {
+      render(newPointButtonComponent, siteMainElement);
+    }))
+  .then(() => {
+    boardPresenter.init();
+  });
