@@ -19,7 +19,7 @@ export default class PointsApiService extends ApiService {
 
   async updatePoint(point) {
     const response = await this._load({
-      url: `points/${point.id}`,
+      url: `${Url.POINTS}/${point.id}`,
       method: Method.PUT,
       body: JSON.stringify(this.#adaptToServer(point)),
       headers: new Headers({'Content-Type': 'application/json'}),
@@ -31,7 +31,6 @@ export default class PointsApiService extends ApiService {
   }
 
   async addPoint(point) {
-    console.log(this.#adaptToServer(point.point));
     const response = await this._load({
       url: Url.POINTS,
       method: Method.POST,

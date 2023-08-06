@@ -31,7 +31,6 @@ function createPointTemplate({point, pointDestinations, allOffers}) {
   const {basePrice, dateFrom, dateTo, offers, isFavorite, type, typeImg = type.toLowerCase()} = point;
   const favoriteButtonClass = (isFavorite) ? 'event__favorite-btn--active' : '';
   const {name} = pointDestinations;
-
   return (
     `<li class="trip-events__item">
       <div class="event">

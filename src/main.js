@@ -52,12 +52,8 @@ function handleNewPointButtonClick() {
 
 render(new TripInfoView(), siteMainElement);
 filterPresenter.init();
+boardPresenter.init();
 
 Promise.all([offersModel.init(), destinationsModel.init()])
-  .then(() => pointsModel.init()
-    .finally(() => {
-      render(newPointButtonComponent, siteMainElement);
-    }))
-  .then(() => {
-    boardPresenter.init();
-  });
+  .then(() => pointsModel.init())
+  .then(() => render(newPointButtonComponent, siteMainElement));

@@ -58,7 +58,7 @@ const UpdateType = {
 
 };
 
-const AUTHORIZATION = 'Basic su9jkskKisSkmS9rsS';
+const AUTHORIZATION = 'Basic su9jkskKisSkmS9rsA';
 
 const END_POINT = 'https://20.ecmascript.pages.academy/big-trip';
 
@@ -73,6 +73,19 @@ const Url = {
   POINTS: 'points',
   DESTINATIONS: 'destinations',
   OFFERS: 'offers'
+};
+
+const noPointType = {
+  [FilterType.EVERYTHING]: 'Click New Event to create your first point',
+  [FilterType.FUTURE]: 'There are no future events now',
+  [FilterType.PRESENT]: 'There are no present events now',
+  [FilterType.PAST]: 'There are no past events now',
+  ['ERROR']: 'Server is not available now'
+};
+
+const TimeLimit = {
+  LOWER_LIMIT: 350,
+  UPPER_LIMIT: 1000,
 };
 
 export {
@@ -95,5 +108,7 @@ export {
   AUTHORIZATION,
   END_POINT,
   Method,
-  Url
+  Url,
+  noPointType,
+  TimeLimit
 };

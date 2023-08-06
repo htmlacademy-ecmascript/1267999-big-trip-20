@@ -34,7 +34,6 @@ function createTypeItem(types, point) {
 }
 
 function createCityItems(pointDestinations) {
-
   return pointDestinations.map((point) => (`
     <option value="${point.name}"></option>
   `)).join('');
@@ -90,13 +89,39 @@ function createImageItem(point, pointDestinations) {
   }).join('');
 }
 
+function createFormButtonTemplate(isEditMode, isDisabled, isSaving, isDeleting) {
+  // <button class="event__save-btn  btn  btn--blue" type="submit">Save</button>
+  // <button class="event__reset-btn" type="reset">${resetButton}</button>
+  // ${rollupButton}
+  const rollupButton = isEditMode ? '<button class="event__rollup-btn" type="button">' : '';
+  let textButtonReset = isEditMode ? 'Cancel' : 'Delete';
+  console.log('isDisabled', isDisabled);
+  console.log('isSaving', isSaving);
+  console.log('isDeleting', isDeleting);
+  console.log('isEditMode', isEditMode);
+
+  if (isDeleting) {
+    textButtonReset = isEditMode ? 'Cancelling...' : 'Deleting...';
+  }
+
+  return `
+    <button class="event__save-btn  btn  btn--blue" type="submit" ${isDisabled ? 'disabled' : ''}>${isSaving ? 'Saving...' : 'Save'}</button>
+    <button class="event__reset-btn" type="reset" ${isDisabled ? 'disabled' : ''}> ${textButtonReset}</button>
+    ${rollupButton}
+    <span class="visually-hidden">Open event</span>
+    </button>
+  `;
+}
+
 function createPointEditTemplate({point, pointDestinations, allOffers, isEditMode}) {
-  const {basePrice, dateFrom, dateTo, offers, type, destination, typeImg = type.toLowerCase()} = point;
+  const {basePrice, dateFrom, dateTo, offers, type, destination, typeImg = type.toLowerCase(), isDisabled, isSaving, isDeleting} = point;
   const destinationById = pointDestinations.find((itemDestination) => itemDestination.id === destination);
   const pointCity = isEditMode ? destinationById.name : '';
-  const resetButton = isEditMode ? 'Delete' : 'Cancel';
-  const rollupButton = isEditMode ? '<button class="event__rollup-btn" type="button">' : '';
 
+  console.log('isDisabledUp', isDisabled);
+  console.log('isSavingUp', isSaving);
+  console.log('isDeletingUp', isDeleting);
+  console.log('isEditModeUp', isEditMode);
   let pointOffers = offers;
   if (offers === undefined) {
     pointOffers = allOffers.find(allOffers.type === type);
@@ -111,7 +136,7 @@ function createPointEditTemplate({point, pointDestinations, allOffers, isEditMod
               <span class="visually-hidden">Choose event type</span>
               <img class="event__type-icon" width="17" height="17" src="img/icons/${typeImg}.png" alt="Event type icon">
             </label>
-            <input class="event__type-toggle  visually-hidden" id="event-type-toggle-1" type="checkbox">
+            <input class="event__type-toggle  visually-hidden" id="event-type-toggle-1" type="checkbox" ${isDisabled ? 'disabled' : ''}>
 
             <div class="event__type-list">
               <fieldset class="event__type-group">
@@ -132,6 +157,7 @@ function createPointEditTemplate({point, pointDestinations, allOffers, isEditMod
              name="event-destination"
              value="${he.encode(pointCity)}"
              list="destination-list-1"
+             ${isDisabled ? 'disabled' : ''}
             >
             <datalist id="destination-list-1">
               ${createCityItems(pointDestinations)}
@@ -146,6 +172,7 @@ function createPointEditTemplate({point, pointDestinations, allOffers, isEditMod
               type="text"
               name="event-start-time"
               value="${he.encode(getCurrentDate(dateFrom))}"
+              ${isDisabled ? 'disabled' : ''}
             >
             &mdash;
             <label class="visually-hidden" for="event-end-time-1">To</label>
@@ -154,6 +181,8 @@ function createPointEditTemplate({point, pointDestinations, allOffers, isEditMod
               id="event-end-time-1"
               type="text" name="event-end-time"
               value="${he.encode(getCurrentDate(dateTo))}"
+              required
+              ${isDisabled ? 'disabled' : ''}
             >
           </div>
 
@@ -162,12 +191,17 @@ function createPointEditTemplate({point, pointDestinations, allOffers, isEditMod
               <span class="visually-hidden">Price</span>
               &euro;
             </label>
-            <input class="event__input  event__input--price" id="event-price-1" type="text" name="event-price" value="${he.encode(`${basePrice}`)}">
+            <input
+              class="event__input  event__input--price"
+              id="event-price-1"
+              type="text"
+              name="event-price"
+              value="${he.encode(`${basePrice}`)}"
+              required
+              ${isDisabled ? 'disabled' : ''}
+            >
           </div>
-
-          <button class="event__save-btn  btn  btn--blue" type="submit">Save</button>
-          <button class="event__reset-btn" type="reset">${resetButton}</button>
-          ${rollupButton}
+          ${createFormButtonTemplate(isDisabled, isSaving, isDeleting, isEditMode)}
         </header>
         <section class="event__details">
           <section class="event__section  event__section--offers">
@@ -394,11 +428,21 @@ export default class PointEditView extends AbstractStatefulView {
   };
 
   static parsePointToState(point) {
-    return {...point};
+    return {...point,
+      isDisabled: false,
+      isSaving: false,
+      isDeleting: false
+    };
   }
 
   static parseStateToPoint(state) {
-    return {...state};
+    const point = {...state};
+
+    delete point.isDisabled;
+    delete point.isSaving;
+    delete point.isDeleting;
+
+    return point;
   }
 }
 
