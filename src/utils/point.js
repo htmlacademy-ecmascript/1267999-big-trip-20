@@ -78,11 +78,7 @@ function isPointPast(point) {
   return dayjs().isAfter(point.dateTo);
 }
 
-function getOfferClass(title) {
-  return title.trim().toLowerCase().replace(/[^a-zA-Z0-9 -]/, '').replace(/\s/g, '-');
-}
-
-function getTypeLabel(event) {
+function getFirstLetterUppercase(event) {
   return event.charAt(0).toUpperCase() + event.slice(1);
 }
 function getPointsDateDifference(pointA, pointB) {
@@ -111,8 +107,7 @@ export {
   isPointFuture,
   isPointPresent,
   isPointPast,
-  getOfferClass,
-  getTypeLabel,
+  getFirstLetterUppercase,
   getPointsDateDifference,
   getPointsDurationDifference,
   getPointsPriceDifference

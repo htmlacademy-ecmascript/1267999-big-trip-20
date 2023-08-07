@@ -1,18 +1,22 @@
 import AbstractView from '../framework/view/abstract-view.js';
 import {formatStringToDateTime, formatStringToShortDate, formatStringToHours, getPointDuration} from '../utils/point.js';
 
-function createOffersTemplate({pointOffers, offers}) {
-  if (pointOffers.length === 0) {
+function createOffersTemplate({allOffers, offers}) {
+
+  if (allOffers.length === 0) {
+
     return '';
   }
 
-  return pointOffers.map((typeOffer) => {
+  return allOffers.map((typeOffer) => {
     offers.includes(typeOffer.id);
     const checked = offers.includes(typeOffer.id);
 
     if (!checked) {
+
       return '';
     }
+
     return (`
       <li class="event__offer">
         <span class="event__offer-title">${typeOffer.title}</span>
@@ -23,19 +27,18 @@ function createOffersTemplate({pointOffers, offers}) {
   }).join('');
 }
 
-function createPointTemplate({point, pointDestinations, pointOffers}) {
-  const {basePrice, dateFrom, dateTo, offers, isFavorite, type, typeImg = type.toLowerCase()} = point;
+function createPointTemplate({point, pointDestination, allOffers}) {
+  const {basePrice, dateFrom, dateTo, offers, isFavorite, type} = point;
   const favoriteButtonClass = (isFavorite) ? 'event__favorite-btn--active' : '';
-  const {name} = pointDestinations;
 
   return (
     `<li class="trip-events__item">
       <div class="event">
         <time class="event__date" datetime=${formatStringToDateTime(dateFrom)}>${formatStringToShortDate(dateFrom)}</time>
         <div class="event__type">
-          <img class="event__type-icon" width="42" height="42" src="img/icons/${typeImg}.png" alt="Event type icon">
+          <img class="event__type-icon" width="42" height="42" src="img/icons/${type.toLowerCase()}.png" alt="Event type icon">
         </div>
-        <h3 class="event__title">${type} ${name}</h3>
+        <h3 class="event__title">${type} ${pointDestination?.name}</h3>
         <div class="event__schedule">
           <p class="event__time">
             <time class="event__start-time" datetime="${formatStringToDateTime(dateFrom)}">${formatStringToHours(dateFrom)}</time>
@@ -49,7 +52,7 @@ function createPointTemplate({point, pointDestinations, pointOffers}) {
         </p>
         <h4 class="visually-hidden">Offers:</h4>
         <ul class="event__selected-offers">
-          ${createOffersTemplate({pointOffers, offers})}
+          ${createOffersTemplate({allOffers, offers})}
         </ul>
         <button class="event__favorite-btn ${favoriteButtonClass}" type="button">
           <span class="visually-hidden">Add to favorite</span>
@@ -67,16 +70,16 @@ function createPointTemplate({point, pointDestinations, pointOffers}) {
 
 export default class PointView extends AbstractView {
   #point = null;
-  #pointDestinations = null;
-  #pointOffers = null;
+  #pointDestination = null;
+  #allOffers = null;
   #onEditClick = null;
   #onFavoriteClick = null;
 
-  constructor({point, pointDestinations, pointOffers, onEditClick, onFavoriteClick}) {
+  constructor({point, pointDestination, allOffers, onEditClick, onFavoriteClick}) {
     super();
     this.#point = point;
-    this.#pointDestinations = pointDestinations;
-    this.#pointOffers = pointOffers;
+    this.#pointDestination = pointDestination;
+    this.#allOffers = allOffers;
     this.#onEditClick = onEditClick;
     this.#onFavoriteClick = onFavoriteClick;
     this.element
@@ -90,8 +93,8 @@ export default class PointView extends AbstractView {
   get template() {
     return createPointTemplate({
       point: this.#point,
-      pointDestinations: this.#pointDestinations,
-      pointOffers: this.#pointOffers
+      pointDestination: this.#pointDestination,
+      allOffers: this.#allOffers
     });
   }
 
