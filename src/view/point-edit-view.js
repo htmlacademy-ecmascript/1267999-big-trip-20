@@ -34,15 +34,17 @@ function createTypeItem(types, point) {
 }
 
 function createCityItems(pointDestinations) {
+
   return pointDestinations.map((point) => (`
     <option value="${point.name}"></option>
   `)).join('');
 }
 
-function createOffersItems({point, allOffers, pointOffers}) {
+function createOffersItems({point, allOffers, offers}) {
   const offersPoint = allOffers.find((pointOffer) => pointOffer.type === point.type);
+
   return offersPoint.offers.map((offer) => {
-    const checked = pointOffers.includes(offer.id) ? 'checked' : '';
+    const checked = offers.includes(offer.id) ? 'checked' : '';
 
     return (`
       <div class="event__offer-selector">
@@ -64,7 +66,26 @@ function createOffersItems({point, allOffers, pointOffers}) {
   }).join('');
 }
 
+function createOffersSection({point, allOffers, offers}) {
+  const offersPoint = allOffers.find((pointOffer) => pointOffer.type === point.type);
+  const isHidden = offersPoint['offers'].length === 0 ? 'visually-hidden' : '' ;
+
+  return (`
+    <section class="event__section  event__section--offers ${isHidden}">
+      <h3 class="event__section-title  event__section-title--offers">Offers</h3>
+      <div class="event__available-offers">
+        ${createOffersItems({point, allOffers, offers})}
+      </div>
+    </section>
+  `);
+}
+
 function createDescriptionItem(point, pointDestinations) {
+  if (!point.destination) {
+
+    return '';
+  }
+
   return pointDestinations.map((pointDestination) => {
     const destination = pointDestination.id.includes(point.destination);
     if (destination) {
@@ -77,6 +98,10 @@ function createDescriptionItem(point, pointDestinations) {
 }
 
 function createImageItem(point, pointDestinations) {
+  if (!point.destination) {
+
+    return '';
+  }
 
   return pointDestinations.map((pointDestination) => {
     const destination = pointDestination.id.includes(point.destination);
@@ -89,17 +114,28 @@ function createImageItem(point, pointDestinations) {
   }).join('');
 }
 
-function createFormButtonTemplate(isEditMode, isDisabled, isSaving, isDeleting) {
-  // <button class="event__save-btn  btn  btn--blue" type="submit">Save</button>
-  // <button class="event__reset-btn" type="reset">${resetButton}</button>
-  // ${rollupButton}
-  const rollupButton = isEditMode ? '<button class="event__rollup-btn" type="button">' : '';
-  let textButtonReset = isEditMode ? 'Cancel' : 'Delete';
-  console.log('isDisabled', isDisabled);
-  console.log('isSaving', isSaving);
-  console.log('isDeleting', isDeleting);
-  console.log('isEditMode', isEditMode);
+function createDestinationSection(point, pointDestinations) {
+  if (!point.destination) {
 
+    return '';
+  }
+
+  return (`
+    <section class="event__section  event__section--destination">
+      <h3 class="event__section-title  event__section-title--destination">Destination</h3>
+      ${createDescriptionItem(point, pointDestinations)}
+      <div class="event__photos-container">
+        <div class="event__photos-tape">
+          ${createImageItem(point, pointDestinations)}
+        </div>
+      </div>
+    </section>
+  `);
+}
+
+function createFormButtonTemplate(isDisabled, isSaving, isDeleting, isEditMode) {
+  const rollupButton = isEditMode ? '<button class="event__rollup-btn" type="button">' : '';
+  let textButtonReset = isEditMode ? 'Delete' : 'Cancel';
   if (isDeleting) {
     textButtonReset = isEditMode ? 'Cancelling...' : 'Deleting...';
   }
@@ -114,19 +150,9 @@ function createFormButtonTemplate(isEditMode, isDisabled, isSaving, isDeleting) 
 }
 
 function createPointEditTemplate({point, pointDestinations, allOffers, isEditMode}) {
-  const {basePrice, dateFrom, dateTo, offers, type, destination, typeImg = type.toLowerCase(), isDisabled, isSaving, isDeleting} = point;
+  const {basePrice, dateFrom, dateTo, offers, type, destination, isDisabled, isSaving, isDeleting} = point;
   const destinationById = pointDestinations.find((itemDestination) => itemDestination.id === destination);
-  const pointCity = isEditMode ? destinationById.name : '';
 
-  console.log('isDisabledUp', isDisabled);
-  console.log('isSavingUp', isSaving);
-  console.log('isDeletingUp', isDeleting);
-  console.log('isEditModeUp', isEditMode);
-  let pointOffers = offers;
-  if (offers === undefined) {
-    pointOffers = allOffers.find(allOffers.type === type);
-    return pointOffers;
-  }
   return (`
     <li class="trip-events__item">
       <form class="event event--edit" action="#" method="post">
@@ -134,7 +160,7 @@ function createPointEditTemplate({point, pointDestinations, allOffers, isEditMod
           <div class="event__type-wrapper">
             <label class="event__type  event__type-btn" for="event-type-toggle-1">
               <span class="visually-hidden">Choose event type</span>
-              <img class="event__type-icon" width="17" height="17" src="img/icons/${typeImg}.png" alt="Event type icon">
+              <img class="event__type-icon" width="17" height="17" src="img/icons/${type.toLowerCase()}.png" alt="Event type icon">
             </label>
             <input class="event__type-toggle  visually-hidden" id="event-type-toggle-1" type="checkbox" ${isDisabled ? 'disabled' : ''}>
 
@@ -155,7 +181,8 @@ function createPointEditTemplate({point, pointDestinations, allOffers, isEditMod
              id="event-destination-1"
              type="text"
              name="event-destination"
-             value="${he.encode(pointCity)}"
+             value="${he.encode(destinationById?.name || '')}"
+             required
              list="destination-list-1"
              ${isDisabled ? 'disabled' : ''}
             >
@@ -204,29 +231,13 @@ function createPointEditTemplate({point, pointDestinations, allOffers, isEditMod
           ${createFormButtonTemplate(isDisabled, isSaving, isDeleting, isEditMode)}
         </header>
         <section class="event__details">
-          <section class="event__section  event__section--offers">
-            <h3 class="event__section-title  event__section-title--offers">Offers</h3>
-
-            <div class="event__available-offers">
-              ${createOffersItems({point, allOffers, pointOffers})}
-            </div>
-          </section>
-
-          <section class="event__section  event__section--destination">
-            <h3 class="event__section-title  event__section-title--destination">Destination</h3>
-            ${createDescriptionItem(point, pointDestinations)}
-            <div class="event__photos-container">
-              <div class="event__photos-tape">
-                ${createImageItem(point, pointDestinations)}
-              </div>
-            </div>
-          </section>
+          ${createOffersSection({point, allOffers, offers})}
+          ${createDestinationSection(point, pointDestinations)}
         </section>
       </form>
     </li>
   `);
 }
-
 
 export default class PointEditView extends AbstractStatefulView {
   #pointDestinations = null;

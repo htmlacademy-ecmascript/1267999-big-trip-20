@@ -30,9 +30,10 @@ export default class PointPresenter {
     this.#point = point;
     const prevPointComponent = this.#pointComponent;
     const prevPointEditComponent = this.#pointEditComponent;
+
     this.#pointComponent = new PointView({
       point: this.#point,
-      pointDestinations: this.#destinationsModel.getById(point.destination),
+      pointDestination: this.#destinationsModel.getById(point.destination),
       allOffers: this.#offersModel.getByType(point.type),
       onEditClick: this.#editClickHandler,
       onFavoriteClick: this.#favoriteClickHandler
@@ -156,7 +157,6 @@ export default class PointPresenter {
       UpdateType.MINOR,
       point
     );
-    this.#replaceFormToPoint();
   };
 
   #deleteClickHandler = (point) => {

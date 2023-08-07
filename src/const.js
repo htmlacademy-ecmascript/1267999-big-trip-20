@@ -1,5 +1,4 @@
 const TYPES = ['taxi', 'bus', 'train', 'ship', 'drive', 'flight', 'check-in', 'sightseeing', 'restaurant'];
-const CITIES = ['Geneva', 'Amsterdam', 'Chamonix', 'Rotterdam', 'Helmond', 'Breda'];
 const Duration = {
   HOUR: 5,
   DAY: 5,
@@ -9,15 +8,12 @@ const MSEC_IN_SEC = 1000;
 const SEC_IN_MIN = 60;
 const MIN_IN_HOUR = 60;
 const HOUR_IN_DAY = 24;
-const DESTINATION_COUNT = 5;
-const OFFER_COUNT = 5;
-const POINT_COUNT = 5;
-const DEFAULT_TYPE = 'flight';
-const DEFAULT_DESTINATION = 'Geneva';
+
+const DEFAULT_TYPE = TYPES[0];
 const POINT_EMPTY = {
   id: '-1',
   type: DEFAULT_TYPE,
-  destination: DEFAULT_DESTINATION,
+  destination: '',
   dateFrom: new Date,
   dateTo: new Date,
   basePrice: '',
@@ -58,7 +54,7 @@ const UpdateType = {
 
 };
 
-const AUTHORIZATION = 'Basic su9jkskKisSkmS9rsA';
+const AUTHORIZATION = 'Basic sujkskKisSkmS9rsW';
 
 const END_POINT = 'https://20.ecmascript.pages.academy/big-trip';
 
@@ -75,12 +71,11 @@ const Url = {
   OFFERS: 'offers'
 };
 
-const noPointType = {
+const noPointMessage = {
   [FilterType.EVERYTHING]: 'Click New Event to create your first point',
   [FilterType.FUTURE]: 'There are no future events now',
   [FilterType.PRESENT]: 'There are no present events now',
-  [FilterType.PAST]: 'There are no past events now',
-  ['ERROR']: 'Server is not available now'
+  [FilterType.PAST]: 'There are no past events now'
 };
 
 const TimeLimit = {
@@ -90,15 +85,11 @@ const TimeLimit = {
 
 export {
   TYPES,
-  CITIES,
   Duration,
   MSEC_IN_SEC,
   SEC_IN_MIN,
   MIN_IN_HOUR,
   HOUR_IN_DAY,
-  DESTINATION_COUNT,
-  OFFER_COUNT,
-  POINT_COUNT,
   POINT_EMPTY,
   FilterType,
   Mode,
@@ -109,6 +100,6 @@ export {
   END_POINT,
   Method,
   Url,
-  noPointType,
+  noPointMessage,
   TimeLimit
 };

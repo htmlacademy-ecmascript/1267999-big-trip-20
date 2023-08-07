@@ -56,9 +56,11 @@ export default class BoardPresenter {
     this.#currentFilterType = this.#filterModel.filter;
     const points = this.#pointsModel.points;
     const filteredPoints = filterRules[this.#currentFilterType](points);
+
     if (this.#currentSortType) {
       return sortRules[this.#currentSortType](filteredPoints);
     }
+
     return filteredPoints;
   }
 
@@ -142,6 +144,7 @@ export default class BoardPresenter {
         }
         break;
     }
+
     this.#uiBlocker.unblock();
   };
 

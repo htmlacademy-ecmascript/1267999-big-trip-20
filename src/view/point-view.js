@@ -27,18 +27,18 @@ function createOffersTemplate({allOffers, offers}) {
   }).join('');
 }
 
-function createPointTemplate({point, pointDestinations, allOffers}) {
-  const {basePrice, dateFrom, dateTo, offers, isFavorite, type, typeImg = type.toLowerCase()} = point;
+function createPointTemplate({point, pointDestination, allOffers}) {
+  const {basePrice, dateFrom, dateTo, offers, isFavorite, type} = point;
   const favoriteButtonClass = (isFavorite) ? 'event__favorite-btn--active' : '';
-  const {name} = pointDestinations;
+
   return (
     `<li class="trip-events__item">
       <div class="event">
         <time class="event__date" datetime=${formatStringToDateTime(dateFrom)}>${formatStringToShortDate(dateFrom)}</time>
         <div class="event__type">
-          <img class="event__type-icon" width="42" height="42" src="img/icons/${typeImg}.png" alt="Event type icon">
+          <img class="event__type-icon" width="42" height="42" src="img/icons/${type.toLowerCase()}.png" alt="Event type icon">
         </div>
-        <h3 class="event__title">${type} ${name}</h3>
+        <h3 class="event__title">${type} ${pointDestination?.name}</h3>
         <div class="event__schedule">
           <p class="event__time">
             <time class="event__start-time" datetime="${formatStringToDateTime(dateFrom)}">${formatStringToHours(dateFrom)}</time>
@@ -70,15 +70,15 @@ function createPointTemplate({point, pointDestinations, allOffers}) {
 
 export default class PointView extends AbstractView {
   #point = null;
-  #pointDestinations = null;
+  #pointDestination = null;
   #allOffers = null;
   #onEditClick = null;
   #onFavoriteClick = null;
 
-  constructor({point, pointDestinations, allOffers, onEditClick, onFavoriteClick}) {
+  constructor({point, pointDestination, allOffers, onEditClick, onFavoriteClick}) {
     super();
     this.#point = point;
-    this.#pointDestinations = pointDestinations;
+    this.#pointDestination = pointDestination;
     this.#allOffers = allOffers;
     this.#onEditClick = onEditClick;
     this.#onFavoriteClick = onFavoriteClick;
@@ -93,7 +93,7 @@ export default class PointView extends AbstractView {
   get template() {
     return createPointTemplate({
       point: this.#point,
-      pointDestinations: this.#pointDestinations,
+      pointDestination: this.#pointDestination,
       allOffers: this.#allOffers
     });
   }

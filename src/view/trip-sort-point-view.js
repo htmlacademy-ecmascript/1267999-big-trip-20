@@ -8,23 +8,24 @@ const enabledSortType = {
   [SortType.PRICE]: true,
   [SortType.OFFER]: false
 };
+
 function getSortItem(sortItem) {
   return (`
   <div class="trip-sort__item  trip-sort__item--${sortItem.type}">
-  <input
-    id="sort-${sortItem.type}"
-    class="trip-sort__input  visually-hidden"
-    type="radio"
-    name="trip-sort"
-    value="sort-${sortItem.type}"
-    data-sort-type="${sortItem.type}"
-    ${(sortItem.isCheked) ? 'checked' : ''}
-    ${(sortItem.isDisabled) ? 'disabled' : ''}
-  >
-  <label class="trip-sort__btn" for="sort-${sortItem.type}">
-    ${sortItem.type}
-  </label>
-</div>
+    <input
+      id="sort-${sortItem.type}"
+      class="trip-sort__input  visually-hidden"
+      type="radio"
+      name="trip-sort"
+      value="sort-${sortItem.type}"
+      data-sort-type="${sortItem.type}"
+      ${(sortItem.isCheked) ? 'checked' : ''}
+      ${(sortItem.isDisabled) ? 'disabled' : ''}
+    >
+    <label class="trip-sort__btn" for="sort-${sortItem.type}">
+      ${sortItem.type}
+    </label>
+  </div>
   `);
 }
 
@@ -58,9 +59,11 @@ export default class TripSortPointView extends AbstractView {
   }
 
   #sortTypeChangeHandler = (evt) => {
+
     if (evt.target.tagName !== 'INPUT') {
       return;
     }
+
     evt.preventDefault();
     this.#onSortTypeChange(evt.target.dataset.sortType);
   };
