@@ -1,31 +1,13 @@
-import {MSEC_IN_SEC, SEC_IN_MIN, MIN_IN_HOUR, HOUR_IN_DAY, Duration} from '../const.js';
+import {MSEC_IN_SEC, SEC_IN_MIN, MIN_IN_HOUR, HOUR_IN_DAY} from '../const.js';
 import dayjs from 'dayjs';
 import duration from 'dayjs/plugin/duration';
 import relativeTime from 'dayjs/plugin/relativeTime';
-import {getRandomInteger} from './common.js';
 
 dayjs.extend(duration);
 dayjs.extend(relativeTime);
 
 const MSEC_IN_HOUR = MSEC_IN_SEC * SEC_IN_MIN * MIN_IN_HOUR;
 const MSEC_IN_DAY = MSEC_IN_HOUR * HOUR_IN_DAY;
-let dateNew = dayjs().subtract(getRandomInteger(0, Duration.DAY), 'day').toDate();
-
-function getDate({next}) {
-  const minsGap = getRandomInteger(0, Duration.MIN);
-  const hoursGap = getRandomInteger(1, Duration.HOUR);
-  const daysGap = getRandomInteger(0, Duration.DAY);
-
-  if (next) {
-    dateNew = dayjs(dateNew)
-      .add(minsGap, 'minute')
-      .add(hoursGap, 'hour')
-      .add(daysGap, 'day')
-      .toDate();
-  }
-
-  return dateNew;
-}
 
 function getCurrentDate(date) {
   return dayjs(date).format('DD/MM/YY HH:mm');
@@ -82,18 +64,18 @@ function getFirstLetterUppercase(event) {
   return event.charAt(0).toUpperCase() + event.slice(1);
 }
 function getPointsDateDifference(pointA, pointB) {
-  return Date.parse(pointA.dateFrom) - Date.parse(pointB.dateFrom);
+  return Date.parse(pointB.dateFrom) - Date.parse(pointA.dateFrom);
 }
 
 function getPointsDurationDifference(pointA, pointB) {
   const durationA = Date.parse(pointA.dateTo) - Date.parse(pointA.dateFrom);
   const durationB = Date.parse(pointB.dateTo) - Date.parse(pointB.dateFrom);
 
-  return durationA - durationB;
+  return durationB - durationA;
 }
 
 function getPointsPriceDifference(pointA, pointB) {
-  return pointA.basePrice - pointB.basePrice;
+  return pointB.basePrice - pointA.basePrice;
 }
 
 export {
@@ -101,7 +83,6 @@ export {
   formatStringToDateTime,
   formatStringToShortDate,
   formatStringToHours,
-  getDate,
   getCurrentDate,
   formatStringToCapital,
   isPointFuture,

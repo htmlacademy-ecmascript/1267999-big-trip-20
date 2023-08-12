@@ -166,6 +166,12 @@ export default class BoardPresenter {
         remove(this.#loadingComponent);
         this.#renderBoard();
         break;
+      case UpdateType.ERROR:
+        this.#isLoading = false;
+        remove(this.#loadingComponent);
+        this.#currentFilterType = 'ERROR';
+        this.#clearBoard();
+        this.#renderNoPoint();
     }
   };
 

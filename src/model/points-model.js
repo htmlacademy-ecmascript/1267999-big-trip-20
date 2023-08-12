@@ -20,6 +20,8 @@ export default class PointsModel extends Observable {
       this.#points = points.map(this.#adaptPointToClient);
     } catch(err) {
       this.#points = [];
+      this._notify(UpdateType.ERROR);
+      return;
     }
 
     this._notify(UpdateType.INIT);
@@ -56,10 +58,11 @@ export default class PointsModel extends Observable {
         newPoint,
         ...this.#points
       ];
-      this._notify(updateType, newPoint);
 
+      this._notify(updateType, newPoint);
     } catch(err) {
-      throw new Error('Can\'t add point');
+      this.#points = [];
+      this._notify(UpdateType.ERROR);
     }
   }
 
