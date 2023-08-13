@@ -49,7 +49,7 @@ const UpdateType = {
   ERROR: 'ERROR'
 };
 
-const AUTHORIZATION = 'Basic sujkskKisSkmS9rsW';
+const AUTHORIZATION = 'Basic sujkskKisSkmS9rs';
 
 const END_POINT = 'https://20.ecmascript.pages.academy/big-trip';
 
@@ -71,7 +71,7 @@ const noPointMessage = {
   [FilterType.FUTURE]: 'There are no future events now',
   [FilterType.PRESENT]: 'There are no present events now',
   [FilterType.PAST]: 'There are no past events now',
-  ['ERROR']: 'Server is not available now'
+  ERROR: 'Server is not available now'
 };
 
 const TimeLimit = {

@@ -137,7 +137,7 @@ function createFormButtonTemplate(isDisabled, isSaving, isDeleting, isEditMode) 
   const rollupButton = isEditMode ? '<button class="event__rollup-btn" type="button">' : '';
   let textButtonReset = isEditMode ? 'Delete' : 'Cancel';
   if (isDeleting) {
-    textButtonReset = isEditMode ? 'Cancelling...' : 'Deleting...';
+    textButtonReset = isEditMode ? 'Deleting...' : 'Cancelling...';
   }
 
   return `
@@ -363,11 +363,14 @@ export default class PointEditView extends AbstractStatefulView {
     const newDestinationName = evt.target.value;
     const newDestination = this.#pointDestinations.find((destination) => destination.name === newDestinationName);
 
-    if (newDestination) {
-      this.updateElement({
-        destination: newDestination.id,
-      });
+    if (!newDestination) {
+      evt.target.value = '';
+      return;
     }
+
+    this.updateElement({
+      destination: newDestination.id,
+    });
   };
 
   #offersChangeHandler = (evt) => {
@@ -382,6 +385,15 @@ export default class PointEditView extends AbstractStatefulView {
 
   #priceInputHandler = (evt) => {
     evt.preventDefault();
+    const inputPrice = this.element.querySelector('.event__input--price');
+
+    if (Math.sign(evt.target.value) !== 1) {
+      inputPrice.setCustomValidity('Введите положительное целое число');
+      inputPrice.reportValidity();
+      evt.target.value = '';
+      return;
+    }
+
     this._setState({
       basePrice: evt.target.value,
     });
